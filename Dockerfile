@@ -1,4 +1,4 @@
 FROM python:3
+ADD splunklib /splunklib
 ADD main.py /
-ADD splunklib /
 CMD [ "python", "./main.py" ]
