@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-b-searchgen-3sps
+  labels:
+    customer: b
+    type: searchgen
+    sps: "3"
+    app: saas
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      customer: b
+      type: searchgen
+      sps: "3"
+  template:
+    metadata:
+      labels:
+        customer: b
+        type: searchgen
+        sps: "3"
+        app: saas
+    spec:
+      nodeSelector:
+        role: splunk
+      containers:
+        - name: searchgen
+          image: "hovu96/splunk-searchgen:latest"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SEARCH_GEN_SPL
+              value: "| search earliest=-10m latest=now index=_internal"
+            - name: SEARCH_GEN_HOST
+              value: "...."
+            - name: SEARCH_GEN_USER
+              value: "admin"
+            - name: SEARCH_GEN_PASSWORD
+              value: "...."
+            - name: SEARCH_GEN_SPS
+              value: "3"
+          resources:
+              requests:
+                cpu: 500m
+                memory: 100Mi
+              limits:
+                cpu: 500m
+                memory: 100Mi                
